@@ -21,7 +21,9 @@ defmodule ExPostmark.Mixfile do
   end
 
   defp apps() do
-    []
+    [
+      :logger,
+    ]
   end
 
   defp deps(:dev) do
