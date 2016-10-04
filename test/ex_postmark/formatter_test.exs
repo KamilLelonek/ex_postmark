@@ -1,5 +1,5 @@
 defmodule ExPostmark.FormatterTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias ExPostmark.Formatter
 
@@ -21,6 +21,27 @@ defmodule ExPostmark.FormatterTest do
     test "should not format a recipient when it is empty" do
       assert_raise ArgumentError, fn ->
         format_recipient("")
+      end
+      assert_raise ArgumentError, fn ->
+        format_recipient(nil)
+      end
+    end
+
+    test "should not format a recipient when an email is empty" do
+      assert_raise ArgumentError, fn ->
+        format_recipient({"Foo Bar", nil})
+      end
+      assert_raise ArgumentError, fn ->
+        format_recipient({"Foo Bar", ""})
+      end
+    end
+
+    test "should not format a recipient when a name and an email are empty" do
+      assert_raise ArgumentError, fn ->
+        format_recipient({nil, nil})
+      end
+      assert_raise ArgumentError, fn ->
+        format_recipient({"", ""})
       end
     end
   end
