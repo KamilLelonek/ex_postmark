@@ -3,7 +3,18 @@ defmodule ExPostmark do
 
   import Supervisor.Spec, warn: false
 
-  def  start(_, _), do: Supervisor.start_link(children(), options())
-  defp options(),   do: [strategy: :one_for_one, name: ExPostmark.Supervisor]
-  defp children(),  do: []
+  def  start(_type, _args), do: Supervisor.start_link(children(), options())
+
+  defp options() do
+    [
+      strategy: :one_for_one,
+      name:     ExPostmark.Supervisor,
+    ]
+  end
+
+  defp children() do
+    [
+      worker(ExPostmark.Adapters.Local.Storage, []),
+    ]
+  end
 end
