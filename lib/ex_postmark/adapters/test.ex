@@ -15,8 +15,9 @@ defmodule ExPostmark.Adapters.Test do
   """
   use ExPostmark.Adapter
 
-  def deliver(email, _config) do
+  def deliver(email) do
     send(self(), {:email, email})
+
     {:ok, %{}}
   end
 end
