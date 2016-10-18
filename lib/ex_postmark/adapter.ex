@@ -2,13 +2,14 @@ defmodule ExPostmark.Adapter do
   @moduledoc ~S"""
   Specification of the email delivery adapter.
   """
-  @type t     :: module
-  @type email :: Email.t
+  @type t      :: module
+  @type email  :: Email.t
+  @type config :: Keyword.t
 
   @doc """
   Delivers an email.
   """
-  @callback deliver(email) :: {:ok, term} | {:error, term}
+  @callback deliver(email, config) :: {:ok, term} | {:error, term}
 
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do

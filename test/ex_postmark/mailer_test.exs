@@ -5,7 +5,7 @@ defmodule ExPostmark.MailerTest do
     use ExPostmark.Adapter,
       required_config: [:api_key]
 
-    def deliver(email), do: {:ok, email}
+    def deliver(email, _config), do: {:ok, email}
   end
 
   Application.put_env(
@@ -66,7 +66,7 @@ defmodule ExPostmark.MailerTest do
     defmodule NoConfigAdapter do
       use ExPostmark.Adapter, required_config: [:xyz]
 
-      def deliver(email), do: {:ok, email}
+      def deliver(email, _config), do: {:ok, email}
     end
 
     Application.put_env(

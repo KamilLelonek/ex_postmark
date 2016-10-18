@@ -6,7 +6,7 @@ defmodule ExPostmark.AdapterTest do
   defmodule FakeAdapter do
     use Adapter, required_config: [:api_key]
 
-    def deliver(email), do: {:ok, email}
+    def deliver(email, _config), do: {:ok, email}
   end
 
   test "should provide a required config" do

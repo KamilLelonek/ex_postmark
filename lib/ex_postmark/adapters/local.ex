@@ -17,7 +17,7 @@ defmodule ExPostmark.Adapters.Local do
   """
   use ExPostmark.Adapter
 
-  def deliver(%ExPostmark.Email{} = email) do
+  def deliver(%ExPostmark.Email{} = email, _config) do
     %ExPostmark.Email{headers: %{"Message-ID" => id}} = ExPostmark.Adapters.Local.Storage.push(email)
 
     {:ok, %{id: id}}

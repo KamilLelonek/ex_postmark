@@ -79,6 +79,6 @@ defmodule ExPostmark.Mailer do
   def deliver(adapter, %ExPostmark.Email{} = email, config) do
     :ok = config |> Keyword.delete(:adapter) |> adapter.validate_config()
 
-    adapter.deliver(email)
+    adapter.deliver(email, config)
   end
 end
