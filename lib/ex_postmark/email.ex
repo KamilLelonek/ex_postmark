@@ -165,6 +165,7 @@ defmodule ExPostmark.Email do
   @spec from(t, mailbox | address) :: t
   def from(%__MODULE__{} = email, from) do
     from = format_recipient(from)
+
     %{email | from: from}
   end
 
@@ -187,6 +188,7 @@ defmodule ExPostmark.Email do
       recipients
       |> Enum.map(&format_recipient(&1))
       |> Enum.concat(to)
+
     %{email | to: recipients}
   end
   def to(%__MODULE__{} = email, recipient),
@@ -199,9 +201,8 @@ defmodule ExPostmark.Email do
   """
   @spec put_to(t, mailbox | address | [mailbox | address]) :: t
   def put_to(%__MODULE__{} = email, recipients) when is_list(recipients) do
-    recipients =
-      recipients
-      |> Enum.map(&format_recipient(&1))
+    recipients = Enum.map(recipients, &format_recipient(&1))
+
     %{email | to: recipients}
   end
   def put_to(%__MODULE__{} = email, recipient),
@@ -226,6 +227,7 @@ defmodule ExPostmark.Email do
       recipients
       |> Enum.map(&format_recipient(&1))
       |> Enum.concat(cc)
+
     %{email | cc: recipients}
   end
   def cc(%__MODULE__{} = email, recipient),
@@ -238,9 +240,8 @@ defmodule ExPostmark.Email do
   """
   @spec put_cc(t, mailbox | address | [mailbox | address]) :: t
   def put_cc(%__MODULE__{} = email, recipients) when is_list(recipients) do
-    recipients =
-      recipients
-      |> Enum.map(&format_recipient(&1))
+    recipients = Enum.map(recipients, &format_recipient(&1))
+
     %{email | cc: recipients}
   end
   def put_cc(%__MODULE__{} = email, recipient),
@@ -263,6 +264,7 @@ defmodule ExPostmark.Email do
       recipients
       |> Enum.map(&format_recipient(&1))
       |> Enum.concat(bcc)
+
     %{email | bcc: recipients}
   end
   def bcc(%__MODULE__{} = email, recipient),
@@ -275,9 +277,8 @@ defmodule ExPostmark.Email do
   """
   @spec put_bcc(t, mailbox | address | [mailbox | address]) :: t
   def put_bcc(%__MODULE__{} = email, recipients) when is_list(recipients) do
-    recipients =
-      recipients
-      |> Enum.map(&format_recipient(&1))
+    recipients = Enum.map(recipients, &format_recipient(&1))
+
     %{email | bcc: recipients}
   end
   def put_bcc(%__MODULE__{} = email, recipient),
@@ -305,6 +306,7 @@ defmodule ExPostmark.Email do
   @spec reply_to(t, mailbox | address) :: t
   def reply_to(%__MODULE__{} = email, reply_to) do
     reply_to = format_recipient(reply_to)
+
     %{email | reply_to: reply_to}
   end
 
