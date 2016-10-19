@@ -51,7 +51,7 @@ defmodule ExPostmark.Adapters.Postmark do
     |> prepare_template_model(email)
   end
 
-  defp prepare_from(body, %Email{from: {_name, from}}), do: Map.put(body, "From", from)
+  defp prepare_from(body, %Email{from: from}), do: Map.put(body, "From", prepare_recipient(from))
 
   defp prepare_to(body, %Email{to: to}), do: Map.put(body, "To", prepare_recipients(to))
 
@@ -70,7 +70,10 @@ defmodule ExPostmark.Adapters.Postmark do
     |> Enum.join(",")
   end
 
-  defp prepare_recipient({"",   address}), do: address
+  defp prepare_recipient({name, address})
+  when name in ["", nil],
+    do: address
+
   defp prepare_recipient({name, address}), do: "\"#{name}\" <#{address}>"
 
   defp prepare_template_id(body, %Email{template_id: nil}), do: body

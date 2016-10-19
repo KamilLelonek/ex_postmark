@@ -6,9 +6,9 @@ defmodule ExPostmark.Adapters.PostmarkTest do
 
   @config [server_api_key: "abc123"]
   @email  Email.new(
-    from:           "from@example.com",
+    from:           {"From", "from@example.com"},
     to:             "to@example.com",
-    cc:             "cc@example.com",
+    cc:             ["cc1@example.com", {"CC2", "cc1@example.com"}],
     bcc:            "bcc@example.com",
     reply_to:       "reply_to@example.com",
     headers:        %{"X-Accept-Language" => "pl"},
@@ -35,8 +35,8 @@ defmodule ExPostmark.Adapters.PostmarkTest do
   test "should build a correct body from an Email" do
     assert Postmark.body(@email) == %{
       "Bcc"           => "bcc@example.com",
-      "Cc"            => "cc@example.com",
-      "From"          => "from@example.com",
+      "Cc"            => "cc1@example.com,\"CC2\" <cc1@example.com>",
+      "From"          => "\"From\" <from@example.com>",
       "ReplyTo"       => "reply_to@example.com",
       "TemplateId"    => 1,
       "TemplateModel" => %{name: "name", team: "team"},
