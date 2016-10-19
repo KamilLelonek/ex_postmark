@@ -351,6 +351,9 @@ defmodule ExPostmark.Email do
   """
   @spec template_id(t, pos_integer()) :: t
   def template_id(%__MODULE__{} = email, template_id)
+  when is_binary(template_id),
+    do: %{email | template_id: String.to_integer(template_id)}
+  def template_id(%__MODULE__{} = email, template_id)
   when is_integer(template_id) and template_id > 0,
     do: %{email | template_id: template_id}
   def template_id(%__MODULE__{}, template_id) do

@@ -292,8 +292,13 @@ defmodule ExPostmark.EmailTest do
   end
 
   describe "template_id" do
-    test "should put a template ID" do
+    test "should put a template ID from an integer" do
       email = Email.template_id(Email.new, @template_id)
+
+      assert email == %Email{template_id: @template_id}
+    end
+    test "should put a template ID from a string" do
+      email = Email.template_id(Email.new, to_string(@template_id))
 
       assert email == %Email{template_id: @template_id}
     end
@@ -302,7 +307,6 @@ defmodule ExPostmark.EmailTest do
       assert_raise ArgumentError, fn -> Email.template_id(Email.new, 0) end
       assert_raise ArgumentError, fn -> Email.template_id(Email.new, "") end
       assert_raise ArgumentError, fn -> Email.template_id(Email.new, nil) end
-      assert_raise ArgumentError, fn -> Email.template_id(Email.new, "123") end
     end
   end
 
