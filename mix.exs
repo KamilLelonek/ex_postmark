@@ -10,7 +10,8 @@ defmodule ExPostmark.Mixfile do
       start_permanent: Mix.env == :prod,
       description:     description(),
       package:         package(),
-      deps:            deps(Mix.env)
+      deps:            deps(Mix.env),
+      elixirc_paths:   elixirc_paths(Mix.env),
     ]
   end
 
@@ -44,6 +45,9 @@ defmodule ExPostmark.Mixfile do
     Postmark email adapter for Elixir
     """
   end
+
+  defp elixirc_paths(:test), do: elixirc_paths(:dev) ++ ["test/support"]
+  defp elixirc_paths(_),     do: ["lib", "web"]
 
   defp package do
     [
