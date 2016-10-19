@@ -6,7 +6,7 @@ defmodule ExPostmark.Adapters.Postmark do
 
       # config/config.exs
       config :sample, Sample.Mailer,
-        adapter:          ExPostmark.Adapters.Postmark,
+        adapter:        ExPostmark.Adapters.Postmark,
         server_api_key: "my-api-key"
 
       # lib/sample/mailer.ex
