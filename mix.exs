@@ -25,6 +25,7 @@ defmodule ExPostmark.Mixfile do
     [
       :logger,
       :poison,
+      :hackney,
     ]
   end
 
@@ -37,6 +38,7 @@ defmodule ExPostmark.Mixfile do
   defp deps(_) do
     [
       {:poison, "~> 3.0"},
+      {:hackney, "~> 1.6"},
     ]
   end
 
