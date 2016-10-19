@@ -23,17 +23,20 @@ defmodule ExPostmark.Mixfile do
   defp apps() do
     [
       :logger,
+      :poison,
     ]
   end
 
   defp deps(:dev) do
     [
       {:ex_doc, ">= 0.0.0"},
-    ]
+    ] ++ deps(:all)
   end
 
   defp deps(_) do
-    []
+    [
+      {:poison, "~> 3.0"},
+    ]
   end
 
   defp description do
