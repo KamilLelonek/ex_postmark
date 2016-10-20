@@ -1,8 +1,8 @@
 defmodule ExPostmark.Adapters.Local.Storage do
   @moduledoc ~S"""
-  In-memory storage driver used by the
+  In-Storage storage driver used by the
   [ExPostmark.Adapters.Local](ExPostmark.Adapters.Local.html) module.
-  The emails in this mailbox are stored in memory and won't persist once your
+  The emails in this mailbox are stored in Storage and won't persist once your
   application is stopped.
   """
   use GenServer
@@ -26,7 +26,7 @@ defmodule ExPostmark.Adapters.Local.Storage do
   ## Examples
       iex> email = new |> from("tony.stark@example.com")
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, [...]}
-      iex> Memory.push(email)
+      iex> Storage.push(email)
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}
   """
   def push(email),
@@ -37,13 +37,13 @@ defmodule ExPostmark.Adapters.Local.Storage do
   ## Examples
       iex> email = new |> from("tony.stark@example.com")
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, [...]}
-      iex> Memory.push(email)
+      iex> Storage.push(email)
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}
-      iex> Memory.all() |> Enum.count()
+      iex> Storage.all() |> Enum.count()
       1
-      iex> Memory.pop()
+      iex> Storage.pop()
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}
-      iex> Memory.all() |> Enun.count()
+      iex> Storage.all() |> Enun.count()
       0
   """
   def pop(),
@@ -54,9 +54,9 @@ defmodule ExPostmark.Adapters.Local.Storage do
   ## Examples
       iex> email = new |> from("tony.stark@example.com")
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, [...]}
-      iex> Memory.push(email)
+      iex> Storage.push(email)
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}
-      iex> Memory.get("A1B2C3")
+      iex> Storage.get("A1B2C3")
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}
   """
   def get(id),
@@ -67,9 +67,9 @@ defmodule ExPostmark.Adapters.Local.Storage do
   ## Examples
       iex> email = new |> from("tony.stark@example.com")
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, [...]}
-      iex> Memory.push(email)
+      iex> Storage.push(email)
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}
-      iex> Memory.all()
+      iex> Storage.all()
       [%ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}]
   """
   def all(),
@@ -80,11 +80,11 @@ defmodule ExPostmark.Adapters.Local.Storage do
   ## Examples
       iex> email = new |> from("tony.stark@example.com")
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, [...]}
-      iex> Memory.push(email)
+      iex> Storage.push(email)
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}, headers: %{"Message-ID": "a1b2c3"}, [...]}
-      iex> Memory.delete_all()
+      iex> Storage.delete_all()
       :ok
-      iex> Memory.list()
+      iex> Storage.list()
       []
   """
   def delete_all(),
