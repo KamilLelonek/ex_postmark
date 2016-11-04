@@ -11,6 +11,7 @@ defmodule ExPostmark.Integration.TestPostmark do
   @postmark_email_to    System.get_env("POSTMARK_EMAIL_TO")
 
   @email Email.new(
+    subject:        "Hello from TravisCI",
     from:           @postmark_email_from,
     to:             @postmark_email_to,
     template_id:    @postmark_template_id,

@@ -49,7 +49,14 @@ defmodule ExPostmark.Adapters.Postmark do
     |> prepare_reply_to(email)
     |> prepare_template_id(email)
     |> prepare_template_model(email)
+    |> prepare_subject(email)
   end
+
+  defp prepare_subject(body, %Email{subject: nil}), do: body
+  defp prepare_subject(body, %Email{subject: subject, template_model: nil} = email),
+    do: prepare_template_model(body, %Email{email | template_model: %{subject: subject}})
+  defp prepare_subject(body, %Email{subject: subject} = email),
+    do: prepare_template_model(body, update_in(email.template_model, &Map.put(&1, :subject, subject)))
 
   defp prepare_from(body, %Email{from: from}), do: Map.put(body, "From", prepare_recipient(from))
 
@@ -76,11 +83,11 @@ defmodule ExPostmark.Adapters.Postmark do
 
   defp prepare_recipient({name, address}), do: "\"#{name}\" <#{address}>"
 
-  defp prepare_template_id(body, %Email{template_id: nil}), do: body
-  defp prepare_template_id(body, %Email{template_id: val}), do: Map.put(body, "TemplateId", val)
+  defp prepare_template_id(body, %Email{template_id: nil}),         do: body
+  defp prepare_template_id(body, %Email{template_id: template_id}), do: Map.put(body, "TemplateId", template_id)
 
-  defp prepare_template_model(body ,%Email{template_model: nil}), do: body
-  defp prepare_template_model(body ,%Email{template_model: val}), do: Map.put(body, "TemplateModel", val)
+  defp prepare_template_model(body, %Email{template_model: nil}),            do: body
+  defp prepare_template_model(body, %Email{template_model: template_model}), do: Map.put(body, "TemplateModel", template_model)
 
   defp send_email(headers, params) do
     case post_request(headers, params) do

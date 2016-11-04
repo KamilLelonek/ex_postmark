@@ -6,6 +6,7 @@ defmodule ExPostmark.Adapters.PostmarkTest do
 
   @config [server_api_key: "abc123"]
   @email  Email.new(
+    subject:        "Hello!",
     from:           {"From", "from@example.com"},
     to:             "to@example.com",
     cc:             ["cc1@example.com", {"CC2", "cc1@example.com"}],
@@ -39,7 +40,7 @@ defmodule ExPostmark.Adapters.PostmarkTest do
       "From"          => "\"From\" <from@example.com>",
       "ReplyTo"       => "reply_to@example.com",
       "TemplateId"    => 1,
-      "TemplateModel" => %{name: "name", team: "team"},
+      "TemplateModel" => %{name: "name", team: "team", subject: "Hello!"},
       "To"            => "to@example.com"
     }
   end
