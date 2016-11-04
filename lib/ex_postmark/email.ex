@@ -7,6 +7,7 @@ defmodule ExPostmark.Email do
 
   ## Email fields
 
+  * `subject`        - the subject of the email, example: `"Hello, Avengers!"`
   * `from`           - an email address of the sender, example: `{"Tony Stark", "tony.stark@example.com"}`
   * `to`             - an email address for the recipient(s), example: `[{"Steve Rogers", "steve.rogers@example.com"}]`
   * `cc`             - an intended carbon copy recipient(s) of the email, example: `[{"Bruce Banner", "hulk.smash@example.com"}]`
@@ -35,12 +36,13 @@ defmodule ExPostmark.Email do
 
   You can also directly pass arguments to the `new/1` function.
 
-      email = new(from: "tony.stark@example.com", to: "steve.rogers@example.com")
+      email = new(from: "tony.stark@example.com", to: "steve.rogers@example.com", subject: "Hello, Avengers!")
   """
 
   import ExPostmark.Formatter
 
-  defstruct from:           nil,
+  defstruct subject:        nil,
+            from:           nil,
             to:             [],
             cc:             [],
             bcc:            [],
@@ -49,11 +51,13 @@ defmodule ExPostmark.Email do
             template_id:    nil,
             template_model: %{}
 
+  @type subject :: String.t
   @type name    :: String.t
   @type address :: String.t
   @type mailbox :: {name, address}
 
   @type t :: %__MODULE__{
+    subject:        subject,
     from:           mailbox | nil,
     to:             [mailbox],
     cc:             [mailbox] | [],
@@ -74,6 +78,9 @@ defmodule ExPostmark.Email do
   ## Examples
       iex> new
       %ExPostmark.Email{}
+
+      iex> new(subject: "Hello, Avengers!")
+      %ExPostmark.Email{subject: "Hello, Avengers!"}
 
       iex> new(from: "tony.stark@example.com")
       %ExPostmark.Email{from: {"", "tony.stark@example.com"}}
@@ -117,15 +124,15 @@ defmodule ExPostmark.Email do
 
   You can obviously combine these arguments together:
 
-      iex> new(to: "steve.rogers@example.com", template_id: 1)
-      %ExPostmark.Email{to: [{"", "steve.rogers@example.com"}], template_id: 1}
+      iex> new(to: "steve.rogers@example.com", template_id: 1, subject: "Hello, Avengers!")
+      %ExPostmark.Email{to: [{"", "steve.rogers@example.com"}], template_id: 1, subject: "Hello, Avengers!"}
   """
   @spec new(none | Enum.t) :: t
   def new(opts \\ []),
     do: Enum.reduce(opts, %__MODULE__{}, &do_new/2)
 
   defp do_new({key, value}, email)
-  when key in ~w(from to cc bcc reply_to template_id)a,
+  when key in ~w(subject from to cc bcc reply_to template_id)a,
     do: apply(__MODULE__, key, [email, value])
 
   defp do_new({key, map}, email)
@@ -141,6 +148,32 @@ defmodule ExPostmark.Email do
 
   defp put({key, value}, email, name),
     do: apply(__MODULE__, :"put_#{name}", [email, key, value])
+
+  @doc """
+  Sets the `subject` field.
+
+  The subject must be a string that contains the subject.
+
+  ## Examples
+      iex> new |> subject("Hello, Avengers!")
+      %ExPostmark.Email{bcc: [], cc: [],
+       from: nil, headers: %{},
+       reply_to: nil, template_id: nil, template_model: {subject: "Hello, Avengers!"},
+       template_model: nil, to: []}
+  """
+  @spec subject(t, subject) :: t
+  def subject(%__MODULE__{} = email, subject)
+  when is_binary(subject),
+    do: %{email | subject: subject}
+  def subject(%__MODULE__{}, subject) do
+    raise ArgumentError, message:
+    """
+    subject/2 expects the subject to be a string.
+
+    Instead it got:
+      subject: `#{inspect subject}`.
+    """
+  end
 
   @doc """
   Sets a recipient in the `from` field.

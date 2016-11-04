@@ -3,6 +3,7 @@ defmodule ExPostmark.EmailTest do
 
   alias ExPostmark.Email
 
+  @subject        "Subject"
   @name           "Name"
   @from           "from@example.com"
   @to             "to@example.com"
@@ -20,6 +21,7 @@ defmodule ExPostmark.EmailTest do
 
     test "should create an Email with the given fields" do
       email = Email.new(
+        subject:        @subject,
         from:           @from,
         to:             @to,
         cc:             @cc,
@@ -30,6 +32,7 @@ defmodule ExPostmark.EmailTest do
         template_model: @template_model
       )
 
+      assert email.subject        == @subject
       assert email.from           == {"", @from}
       assert email.to             == [{"", @to}]
       assert email.cc             == [{"", @cc}]
@@ -42,6 +45,19 @@ defmodule ExPostmark.EmailTest do
 
     test "should raise if arguments contain an unknown field" do
       assert_raise ArgumentError, fn -> Email.new(random: "Random") end
+    end
+  end
+
+  describe "subject/2" do
+    test "should put a valid subject" do
+      email = Email.subject(Email.new(), @subject)
+
+      assert email == %Email{subject: @subject}
+    end
+
+    test "should raise if a subject is invalid" do
+      assert_raise ArgumentError, fn -> Email.subject(Email.new(), nil) end
+      assert_raise ArgumentError, fn -> Email.subject(Email.new(), 123) end
     end
   end
 

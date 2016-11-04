@@ -127,6 +127,24 @@ YourApplication.Mailer.deliver(emai)
 
 And that's it, your email should be sent.
 
+**A note about subjects:**
+
+There is a way to set a subject for your email using a template, but it's not done out of the box. You need to make sure to add an additional variable `subject` for your template model and then put it in a place of a `Subject line`.
+
+Here is the final configuration:
+
+![Postmark subject](https://monosnap.com/file/MUem7zVYzB75Oh64FgOUkxGQG98tRZ.png)
+
+Later on, you can use subject in a convenient method like:
+
+```elixir
+email = Email.new()
+      |> Email.subject("foo.bar@example.com")
+      # ...
+```
+
+but don't be confused, as it's not a regular way to put a custom subject.
+
 ## Tests
 
 To run all tests, execute:
