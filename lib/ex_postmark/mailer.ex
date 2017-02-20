@@ -79,6 +79,19 @@ defmodule ExPostmark.Mailer do
   def deliver(adapter, %ExPostmark.Email{} = email, config) do
     :ok = config |> Keyword.delete(:adapter) |> adapter.validate_config()
 
-    adapter.deliver(email, config)
+    adapter.deliver(email, ExPostmark.Mailer.parse_runtime_config(config))
+  end
+
+  @doc """
+  Parses the OTP configuration at run time.
+  This function will transform all the {:system, "ENV_VAR"} tuples into their
+  respective values grabbed from the process environment.
+  """
+  def parse_runtime_config(config) do
+    Enum.map config, fn
+      {key, {:system, env_var}}          -> {key, System.get_env(env_var)}
+      {key, {:system, env_var, default}} -> {key, System.get_env(env_var) || default}
+      {key, value}                       -> {key, value}
+    end
   end
 end
