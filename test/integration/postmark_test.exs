@@ -24,8 +24,6 @@ defmodule ExPostmark.Integration.TestPostmark do
     adapter:        ExPostmark.Adapters.Postmark
   )
 
-  Application.put_env(:ex_postmark, :rest_adapter, :hackney)
-
   defmodule PostmarkMailer do
     use ExPostmark.Mailer, otp_app: :ex_postmark
   end

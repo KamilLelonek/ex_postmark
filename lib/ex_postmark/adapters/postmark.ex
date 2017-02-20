@@ -104,7 +104,7 @@ defmodule ExPostmark.Adapters.Postmark do
     do: rest_adapter().post(url(), headers, params, [:with_body])
 
   defp rest_adapter(),
-    do: Application.get_env(:ex_postmark, :rest_adapter)
+    do: Application.get_env(:ex_postmark, :rest_adapter, :hackney)
 
   defp url(), do: [@base_url, @api_endpoint]
 end
