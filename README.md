@@ -65,7 +65,7 @@ assert_received {:email, email}
 
 config :your_application, YourApplication.Mailer,
   adapter:        ExPostmark.Adapters.Postmark,
-  server_api_key: System.get_env("POSTMARK_SERVER_API_KEY"
+  server_api_key: System.get_env("POSTMARK_SERVER_API_KEY")
 ```
 
 Emails are being sent using regular Postmark platform.
@@ -204,4 +204,4 @@ For integration test make sure you have the following vairables exported in your
 
 ## Documentation
 
-Documentation is written into the library, you will find it in the source code, accessible from `iex` and of course, it all gets published to [hexdocs](http://hexdocs.pm/ex_postmark).
+Documentation is written into the library, you will find it in the source code, accessible from `iex` and of course, it all gets published to [hexdocs](https://hexdocs.pm/ex_postmark).
