@@ -4,24 +4,24 @@ defmodule ExPostmark.Mixfile do
   def project do
     [
       app:             :ex_postmark,
-      version:         "1.1.0",
+      version:         "1.2.0",
       elixir:          "~> 1.3",
       build_embedded:  Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       description:     description(),
       package:         package(),
-      deps:            deps(Mix.env),
+      deps:            deps(),
       elixirc_paths:   elixirc_paths(Mix.env),
     ]
   end
 
-  def application() do
+  def application do
     [
       applications: apps(),
     ]
   end
 
-  defp apps() do
+  defp apps do
     [
       :logger,
       :poison,
@@ -29,16 +29,11 @@ defmodule ExPostmark.Mixfile do
     ]
   end
 
-  defp deps(:dev) do
+  defp deps do
     [
-      {:ex_doc, ">= 0.0.0"},
-    ] ++ deps(:all)
-  end
-
-  defp deps(_) do
-    [
-      {:poison, "~> 3.0"},
+      {:poison, "~> 3.1"},
       {:hackney, "~> 1.6"},
+      {:ex_doc, ">= 0.0.0", runtime: false},
     ]
   end
 
