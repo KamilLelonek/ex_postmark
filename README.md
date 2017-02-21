@@ -12,7 +12,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
     ```elixir
     def deps do
-      [{:ex_postmark, "~> 0.x.x"}]
+      [{:ex_postmark, "~> 1.x.x"}]
     end
     ```
 
@@ -150,11 +150,11 @@ but don't be confused, as it's not a regular way to put a custom subject.
 To run all tests, execute:
 
     mix test
-    
+
 Keep in mind that the default command will skip integration tests. To include them, run:
 
     mix test --include integration
-    
+
 For integration test make sure you have the following vairables exported in your environment:
 
 - `POSTMARK_SERVER_API_KEY ` - Server API token required for authentication from Postmark server credentials
