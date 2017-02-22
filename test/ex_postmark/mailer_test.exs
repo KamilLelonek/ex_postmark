@@ -82,4 +82,48 @@ defmodule ExPostmark.MailerTest do
       NoConfigMailer.deliver(email)
     end
   end
+
+  test "should interpret configuration at runtime", %{email: email} do
+    defmodule ReplaceConfigAdapter do
+      use ExPostmark.Adapter, required_config: [:pid,
+                                                :replace_without_default_empty,
+                                                :replace_with_default_empty,
+                                                :replace_without_default_not_empty,
+                                                :replace_with_default_not_empty]
+
+      def deliver(email, config) do
+        send(config[:pid], %{
+          replace_without_default_empty:     config[:replace_without_default_empty],
+          replace_with_default_empty:        config[:replace_with_default_empty],
+          replace_without_default_not_empty: config[:replace_without_default_not_empty],
+          replace_with_default_not_empty:    config[:replace_with_default_not_empty]
+        })
+        {:ok, email}
+      end
+    end
+
+    System.put_env("NOT_EMPTY_ENV_VAR", "value")
+
+    Application.put_env(
+      :ex_postmark,                      ExPostmark.MailerTest.ReplaceConfigMailer,
+      adapter:                           ReplaceConfigAdapter,
+      pid:                               self(),
+      replace_without_default_empty:     {:system, "EMPTY_ENV_VAR"},
+      replace_with_default_empty:        {:system, "EMPTY_ENV_VAR", "default"},
+      replace_without_default_not_empty: {:system, "NOT_EMPTY_ENV_VAR"},
+      replace_with_default_not_empty:    {:system, "NOT_EMPTY_ENV_VAR", "default"},
+    )
+
+    defmodule ReplaceConfigMailer do
+      use ExPostmark.Mailer, otp_app: :ex_postmark
+    end
+
+    ReplaceConfigMailer.deliver(email)
+
+    assert_receive %{
+      replace_without_default_empty:     nil,
+      replace_with_default_empty:        "default",
+      replace_without_default_not_empty: "value",
+      replace_with_default_not_empty:    "value"}
+  end
 end
