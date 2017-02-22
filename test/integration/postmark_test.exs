@@ -10,13 +10,17 @@ defmodule ExPostmark.Integration.TestPostmark do
   @postmark_email_from  System.get_env("POSTMARK_EMAIL_FROM")
   @postmark_email_to    System.get_env("POSTMARK_EMAIL_TO")
 
-  @email Email.new(
-    subject:        "Hello from TravisCI",
-    from:           @postmark_email_from,
-    to:             @postmark_email_to,
-    template_id:    @postmark_template_id,
-    template_model: %{name: "TravisCI", product_name: "ExPostmark"}
-  )
+  setup do
+    email = Email.new(
+      subject:        "Hello from TravisCI",
+      from:           @postmark_email_from,
+      to:             @postmark_email_to,
+      template_id:    @postmark_template_id,
+      template_model: %{name: "TravisCI", product_name: "ExPostmark"}
+    )
+
+    {:ok, email: email}
+  end
 
   Application.put_env(
     :ex_postmark,   ExPostmark.Integration.TestPostmark.PostmarkMailer,
@@ -28,7 +32,7 @@ defmodule ExPostmark.Integration.TestPostmark do
     use ExPostmark.Mailer, otp_app: :ex_postmark
   end
 
-  test "should deliver a template email using Postmark service" do
-    assert {:ok, %{id: _id}} = PostmarkMailer.deliver(@email)
+  test "should deliver a template email using Postmark service", %{email: email} do
+    assert {:ok, %{id: _id}} = PostmarkMailer.deliver(email)
   end
 end
