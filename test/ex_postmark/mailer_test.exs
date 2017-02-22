@@ -85,19 +85,24 @@ defmodule ExPostmark.MailerTest do
 
   test "should interpret configuration at runtime", %{email: email} do
     defmodule ReplaceConfigAdapter do
-      use ExPostmark.Adapter, required_config: [:pid,
-                                                :replace_without_default_empty,
-                                                :replace_with_default_empty,
-                                                :replace_without_default_not_empty,
-                                                :replace_with_default_not_empty]
+      use ExPostmark.Adapter, required_config: [
+                                :pid,
+                                :replace_without_default_empty,
+                                :replace_with_default_empty,
+                                :replace_without_default_not_empty,
+                                :replace_with_default_not_empty
+                              ]
 
       def deliver(email, config) do
-        send(config[:pid], %{
-          replace_without_default_empty:     config[:replace_without_default_empty],
-          replace_with_default_empty:        config[:replace_with_default_empty],
-          replace_without_default_not_empty: config[:replace_without_default_not_empty],
-          replace_with_default_not_empty:    config[:replace_with_default_not_empty]
-        })
+        send(
+          config[:pid],
+          %{
+            replace_without_default_empty:     config[:replace_without_default_empty],
+            replace_with_default_empty:        config[:replace_with_default_empty],
+            replace_without_default_not_empty: config[:replace_without_default_not_empty],
+            replace_with_default_not_empty:    config[:replace_with_default_not_empty]
+          }
+        )
         {:ok, email}
       end
     end
@@ -124,6 +129,7 @@ defmodule ExPostmark.MailerTest do
       replace_without_default_empty:     nil,
       replace_with_default_empty:        "default",
       replace_without_default_not_empty: "value",
-      replace_with_default_not_empty:    "value"}
+      replace_with_default_not_empty:    "value"
+    }
   end
 end
