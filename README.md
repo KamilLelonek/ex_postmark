@@ -10,19 +10,19 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
   1. Add `ex_postmark` to your list of dependencies in `mix.exs`:
 
-    ```elixir
-    def deps do
-      [{:ex_postmark, "~> 1.x.x"}]
-    end
-    ```
+```elixir
+def deps do
+  [{:ex_postmark, "~> 1.x.x"}]
+end
+```
 
   2. Ensure `ex_postmark` is started before your application:
 
-    ```elixir
-    def application do
-      [applications: [:ex_postmark]]
-    end
-    ```
+```elixir
+def application do
+  [applications: [:ex_postmark]]
+end
+```
 
 ## Usage
 
